@@ -26,18 +26,70 @@
         <div class="text">
             <h1>CADASTRO</h1>
             <p>Nome</p>
-            <input type="text" id="iptNome">
+            <input type="text" onkeyup="verificarNome()" id="iptNome">
+            <i class="textError" id="erroNome"></i>
             <p>Sobrenome</p>
-            <input type="text" id="iptSobrenome">
+            <input type="text" onkeyup="verificarSobrenome()" id="iptSobrenome">
+            <i class="textError" id="erroSobrenome"></i>
             <p>E-mail</p>
-            <input type="text" id="iptEmail">
+            <input type="text" onkeyup="verificarEmail()" id="iptEmail">
+            <i class="textError" id="erroEmail"></i>
             <p>Senha</p>
-            <input type="password" id="iptSenha">
+            <input type="password" onkeyup="verificarSenha()" id="iptSenha">
+            <i class="textError" id="erroSenha"></i>
             <p>Repetir senha</p>
-            <input type="password" id="iptRepetirSenha">
+            <input type="password" onkeyup="verificarRepretir()" id="iptRepetirSenha">
+            <i class="textError" id="erroRepetir"></i>
             <button onclick="cadastrar()">CADASTRAR</button>
         </div>
     </div>
 </body>
+<script>
+    let validarNome = false;
+    let validarSobrenome = false;
+    let validarEmail = false;
+    let validarSenha = false;
+    function verificarNome() {
+        let nome = iptNome.value;
+        if (nome.length <= 2 || nome == '') {
+            erroNome.innerHTML = 'Insira um nome';
+        } else {
+            erroNome.innerHTML = '';
+            validarNome = true;
+        }
+    }
+    function verificarSobrenome() {
+        let sobrenome = iptSobrenome.value;
+        if (sobrenome.length <= 2 || sobrenome == '') {
+            erroSobrenome.innerHTML = 'Insira um sobrenome';
+        } else {
+            erroSobrenome.innerHTML = '';
+            validarSobrenome = true;
+        }
+    }
+    function verificarEmail() {
+        let email = iptEmail.value;
+        for (let i = 0; i < email.length; i++) {
+            if (email.includes('@') && email.includes('.com')) {
+                validarEmail = true;
+                erroEmail.innerHTML = '';
+            } else {
+                erroEmail.innerHTML = 'Preencha com um email válido';
+            }
+        }
+    }
+    function verificarSenha() {
+        let senha = iptSenha.value;
+        let maiuscula = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
+            "A", "S", "D", "F", "G", "H", "J", "K", "L", "Ç", "Z", "X",
+            "C", "V", "B", "N", "M"];
+        let minuscula = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
+            "a", "s", "d", "f", "g", "h", "j", "k", "l", "ç", "z", "x",
+            "c", "v", "b", "n", "m"];
+        let numero = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        let especial = ["!", "@", "_", "$", "%", "&", "*", ".", "/",
+            "#", "?"];
+    }
+</script>
 
 </html>
