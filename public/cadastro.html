@@ -26,19 +26,19 @@
         <div class="text">
             <h1>CADASTRO</h1>
             <p>Nome</p>
-            <input type="text" onkeyup="verificarNome()" id="iptNome">
+            <input type="text" onkeyup="verificarNome()" placeholder="Digite seu nome" id="iptNome">
             <i class="textError" id="erroNome"></i>
             <p>Sobrenome</p>
-            <input type="text" onkeyup="verificarSobrenome()" id="iptSobrenome">
+            <input type="text" onkeyup="verificarSobrenome()" placeholder="Digite seu sobrenome" id="iptSobrenome">
             <i class="textError" id="erroSobrenome"></i>
             <p>E-mail</p>
-            <input type="text" onkeyup="verificarEmail()" id="iptEmail">
+            <input type="text" onkeyup="verificarEmail()" placeholder="Digite seu e-mail" id="iptEmail">
             <i class="textError" id="erroEmail"></i>
             <p>Senha</p>
-            <input type="password" onkeyup="verificarSenha()" id="iptSenha">
+            <input type="password" onkeyup="verificarSenha()" placeholder="Digite sua senha" id="iptSenha">
             <i class="textError" id="erroSenha"></i>
             <p>Repetir senha</p>
-            <input type="password" onkeyup="verificarRepretir()" id="iptRepetirSenha">
+            <input type="password" onkeyup="verificarRepetir()" placeholder="Repita sua senha" id="iptRepetirSenha">
             <i class="textError" id="erroRepetir"></i>
             <button onclick="cadastrar()">CADASTRAR</button>
         </div>
@@ -49,6 +49,7 @@
     let validarSobrenome = false;
     let validarEmail = false;
     let validarSenha = false;
+    let validarRepetir = false;
     function verificarNome() {
         let nome = iptNome.value;
         if (nome.length <= 2 || nome == '') {
@@ -80,6 +81,10 @@
     }
     function verificarSenha() {
         let senha = iptSenha.value;
+        let validarMaiuscula = false;
+        let validarMinuscula = false;
+        let validarNumero = false;
+        let validarEspecial = false;
         let maiuscula = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
             "A", "S", "D", "F", "G", "H", "J", "K", "L", "Ç", "Z", "X",
             "C", "V", "B", "N", "M"];
@@ -89,6 +94,44 @@
         let numero = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
         let especial = ["!", "@", "_", "$", "%", "&", "*", ".", "/",
             "#", "?"];
+        for (let i = 0; i < maiuscula.length; i++) {
+            if (senha.includes(maiuscula[i])) {
+                validarMaiuscula = true;
+                break;
+            }
+        }
+        for (let i = 0; i < minuscula.length; i++) {
+            if (senha.includes(minuscula[i])) {
+                validarMinuscula = true;
+                break;
+            }
+        }
+        for (let i = 0; i < numero.length; i++) {
+            if (senha.includes(numero[i])) {
+                validarNumero = true;
+                break;
+            }
+        }
+        for (let i = 0; i < especial.length; i++) {
+            if (senha.includes(especial[i])) {
+                validarEspecial = true;
+                break;
+            }
+        }
+        if (validarMaiuscula && validarMinuscula && validarNumero && validarEspecial) {
+            validarSenha = true;
+            erroSenha.innerHTML = '';
+        } else {
+            erroSenha.innerHTML = 'Deve conter 8 caracteres ou mais, 1 letra maiúscula, 1 letra minúscula, 1 numero e 1 caracter especial';
+        }
+    }
+    function verificarRepetir() {
+        if (iptSenha.value == iptRepetirSenha.value) {
+            validarRepetir = true;
+            erroRepetir.innerHTML = '';
+        } else {
+            erroRepetir.innerHTML = 'As senhas devem ser iguais';
+        }
     }
 </script>
 

@@ -63,18 +63,18 @@ body {
         color: white;
         justify-content: center;
         align-items: center;
-    }
-    & .text {
-        display: flex;
-        flex-direction: column;
-        color: white;
-        width: 70%;
-    }
-    & .text p{
-        font-size: 20px;
-    }
-    & .text h1{
-        font-size: 64px;
-        justify-self: left;
+        & .text {
+            display: flex;
+            flex-direction: column;
+            color: white;
+            width: 70%;
+            & p{
+                font-size: 20px;
+            }
+            & h1{
+                font-size: 64px;
+                justify-self: left;
+            }
+        }
     }
 }
