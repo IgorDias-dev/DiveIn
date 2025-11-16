@@ -19,6 +19,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        align-items: center;
         width: 20%;
     }
     
@@ -38,11 +39,24 @@
     
     & .opcoesR a{
         text-decoration: none;
-        color: white;
     }
     & img {
         width: 150px;
         height: 150px;
+    }
+    & .inOut {
+        color: #0E2A33;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #A2D7E8;
+        border-radius: 10px;
+        width: 30%;
+        height: 40px;
+        font-size: 16px;
+    }
+    & .normal {
+        color: white;
     }
 }
 html{

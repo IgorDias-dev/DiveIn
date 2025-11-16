@@ -11,12 +11,12 @@
     <div class="menu">
         <div class="opcoesL">
             <img src="./assets/logo.png" alt="Logotipo DiveIn">
-            <a href="index.html">INICIO</a>
-            <a href="sobre.html">SOBRE O MERGULHADOR</a>
+            <a href="index.html" class="normal">INICIO</a>
+            <a href="sobre.html" class="normal">SOBRE O MERGULHADOR</a>
         </div>
         <div class="opcoesR">
-            <a href="cadastro.html">CADASTRE-SE</a>
-            <a href="entrar.html" class="">ENTRAR</a>
+            <a href="cadastro.html" class="normal">CADASTRE-SE</a>
+            <a href="entrar.html" class="inOut">ENTRAR</a>
         </div>
     </div>
 </header>
@@ -133,6 +133,45 @@
             erroRepetir.innerHTML = 'As senhas devem ser iguais';
         }
     }
+    function cadastrar() {
+        if (validarNome && validarSobrenome && validarEmail && validarSenha && validarRepetir) {
+            var nome = iptNome.value;
+            var sobrenome = iptSobrenome.value;
+            var email = iptEmail.value;
+            var senha = iptSenha.value;
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    // crie um atributo que recebe o valor recuperado aqui
+                    // Agora vá para o arquivo routes/usuario.js
+                    nomeServer: nome,
+                    sobrenomeServer: sobrenome,
+                    emailServer: email,
+                    senhaServer: senha
+                }),
+            })
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+                        setTimeout(() => {
+                            window.location = "entrar.html";
+                        }, "1000");
+                    } else {
+                        throw "Houve um erro ao tentar realizar o cadastro!";
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
+            return false;
+        } else {
+
+        }
+    } 
 </script>
 
 </html>
