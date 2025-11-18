@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiveIn - Dashboard</title>
+    <link rel="icon" href="../assets/logo.png">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<header>
+    <div class="menu">
+        <div class="opcoesL">
+            <img src="../assets/logo.png" alt="Logotipo DiveIn">
+        </div>
+        <div class="opcoesR">
+            <a href="criaturas.html" class="normal">CRIATURAS</a>
+            <a href="" class="inOut">SAIR</a>
+        </div>
+    </div>
+</header>
+
+<body>
+    <div class="container">
+        <div class="text">
+            <h1 id="saudacao">Olá, </h1>
+            <div class="indicadores">
+                <div class="criaturasVistas">
+                    <p>Você já viu</p>
+                    <h3>N%</h3>
+                    <h4>N de N</h4>
+                    <p>de criaturas</p>
+                </div>
+                <div class="criaturasMensal">
+                    <h2>Quantidade de criaturas registradas ao longo do ano</h2>
+                    <div class="grafico">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <div class="ultimasCriaturas">
+                    <h2>Ultimas criaturas avistadas</h2>
+                    <p>Criatura 1</p>
+                    <p>Criatura 2</p>
+                    <p>Criatura 3</p>
+                    <p>Criatura 4</p>
+                    <p>Criatura 5</p>
+                    <button>ADICIONAR CRIATURA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    saudacao.innerHTML += `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`;
+    let proximaAtualizacao;
+
+    window.onload = exibirGrafico();
+
+    function exibirGrafico() {
+        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
+        aquarios.forEach(item => {
+            document.getElementById("btnAquario").innerHTML += `
+            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
+            `
+
+            document.getElementById("graficos").innerHTML += `
+                <div id="grafico${item.id}" class="display-none">
+                    <h3 class="tituloGraficos">
+                        <span id="tituloAquario${item.id}">${item.descricao}</span>
+                    </h3>
+                    <div class="graph">
+                        <canvas id="myChartCanvas${item.id}"></canvas>
+                    </div>
+                    <div class="label-captura">
+                        <p id="avisoCaptura${item.id}" style="color: white"></p>
+                    </div>
+                </div>
+            `
+
+            obterDadosGrafico(item.id)
+        });
+
+        if (aquarios.length > 0) {
+            exibirAquario(aquarios[0].id)
+        }
+    }
+
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',],
+            datasets: [{
+                label: '',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1,
+                backgroundColor: 'rgba(14, 42, 51, 1)'
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'rgba(14, 42, 51, 1)'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'rgba(14, 42, 51, 1)'
+                    },
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</html>
