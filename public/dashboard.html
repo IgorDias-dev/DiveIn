@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DiveIn</title>
     <link rel="stylesheet" href="./css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <header>
     <div class="menu">
@@ -22,9 +23,57 @@
 <body>
     <div class="container">
         <div class="text">
-            <h1>Olá,</h1>
+            <h1 id="saudacao">Olá, </h1>
+            <div class="indicadores">
+                <div class="criaturasVistas"></div>
+                <div class="criaturasMensal">
+                    <h2>Quantidade de criaturas registradas ao longo do ano</h2>
+                    <div class="grafico">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+                <div class="ultimasCriaturas"></div>
+            </div>
         </div>
     </div>
 </body>
+<script>
+    saudacao.innerHTML += `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`;
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',],
+            datasets: [{
+                label: '',
+                data: [12, 19, 3, 5, 2, 3],
+                borderWidth: 1,
+                backgroundColor: 'rgba(14, 42, 51, 1)'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'rgba(14, 42, 51, 1)'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'rgba(14, 42, 51, 1)'
+                    },
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 </html>

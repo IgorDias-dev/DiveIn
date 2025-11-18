@@ -90,7 +90,48 @@ body {
             font-size: 20px;
         }
         & .text h1{
-            font-size: 96px;
+            font-size: 80px;
+        }
+        & .indicadores {
+            width: 90%;
+            height: 65%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        & .criaturasMensal{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #A2D7E8;
+            width: 50%;
+            height: 100%;
+            border-radius: 10px;
+            & h2{
+                text-align: center;
+                color: #0E2A33;
+                margin-top: 5%;
+                margin-bottom: 10%;
+                margin-left: 20%;
+                margin-right: 20%;
+            }
+        }
+        & .grafico{
+            width: 80%;
+            height: 70%;
+        }
+        & .criaturasVistas{
+            background-color: #A2D7E8;
+            width: 20%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        & .ultimasCriaturas{
+            background-color: #A2D7E8;
+            width: 20%;
+            height: 100%;
+            border-radius: 10px;
         }
     }
 }
