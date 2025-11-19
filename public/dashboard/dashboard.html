@@ -35,16 +35,16 @@
                 <div class="criaturasMensal">
                     <h2>Quantidade de criaturas registradas ao longo do ano</h2>
                     <div class="grafico">
-                        <canvas id="myChart"></canvas>
+                        <canvas id="myChartHistorico"></canvas>
                     </div>
                 </div>
                 <div class="ultimasCriaturas">
                     <h2>Ultimas criaturas avistadas</h2>
-                    <p>Criatura 1</p>
-                    <p>Criatura 2</p>
-                    <p>Criatura 3</p>
-                    <p>Criatura 4</p>
-                    <p>Criatura 5</p>
+                    <p id="criatura1"></p>
+                    <p id="criatura2"></p>
+                    <p id="criatura3"></p>
+                    <p id="criatura4"></p>
+                    <p id="criatura5"></p>
                     <button>ADICIONAR CRIATURA</button>
                 </div>
             </div>
@@ -56,77 +56,238 @@
     let proximaAtualizacao;
 
     window.onload = exibirGrafico();
+    window.onload = exibirUltimasCriaturas(historico);
 
-    function exibirGrafico() {
-        var aquarios = JSON.parse(sessionStorage.AQUARIOS);
-        aquarios.forEach(item => {
-            document.getElementById("btnAquario").innerHTML += `
-            <button class="btn-chart" onclick="exibirAquario(${item.id})" id="btnAquario${item.id}">${item.descricao}</button>
-            `
+    function exibirUltimasCriaturas(historico) {
+        let criaturas = [];
+        fetch(`/medidas/ultimas-criaturas/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (lista) {
+                    console.log(`Dados recebidos: ${JSON.stringify(lista)}`);
+                    lista.reverse();
 
-            document.getElementById("graficos").innerHTML += `
-                <div id="grafico${item.id}" class="display-none">
-                    <h3 class="tituloGraficos">
-                        <span id="tituloAquario${item.id}">${item.descricao}</span>
-                    </h3>
-                    <div class="graph">
-                        <canvas id="myChartCanvas${item.id}"></canvas>
-                    </div>
-                    <div class="label-captura">
-                        <p id="avisoCaptura${item.id}" style="color: white"></p>
-                    </div>
-                </div>
-            `
+                    for (i = 0; i < lista.length; i++) {
+                        var registro = lista[i];
+                        criaturas.push(registro.criatura);
+                    }
 
-            obterDadosGrafico(item.id)
+                    criatura1.innerHTML = criaturas[0];
+                    criatura2.innerHTML = criaturas[1];
+                    criatura3.innerHTML = criaturas[2];
+                    criatura4.innerHTML = criaturas[3];
+                    criatura5.innerHTML = criaturas[4];
+
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
         });
-
-        if (aquarios.length > 0) {
-            exibirAquario(aquarios[0].id)
-        }
+        setTimeout(() => exibirUltimasCriaturas(historico), 2000);
     }
 
+    function exibirGrafico() {
+        var historico = JSON.parse(sessionStorage.ID_USUARIO);
+        obterDadosGrafico(historico);
+    }
 
-    const ctx = document.getElementById('myChart');
+    function obterDadosGrafico(historico) {
+        if (proximaAtualizacao != undefined) {
+            clearTimeout(proximaAtualizacao);
+        }
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',],
+        fetch(`/medidas/ultimas/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (resposta) {
+                    console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                    resposta.reverse();
+
+                    plotarGrafico(resposta, historico);
+
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+    }
+
+    function plotarGrafico(resposta, historico) {
+
+        console.log('iniciando plotagem do gráfico...');
+
+        // Criando estrutura para plotar gráfico - labels
+        let labels = [];
+
+        // Criando estrutura para plotar gráfico - dados
+        let dados = {
+            labels: labels,
             datasets: [{
                 label: '',
-                data: [12, 19, 3, 5, 2, 3],
+                data: [],
                 borderWidth: 1,
                 backgroundColor: 'rgba(14, 42, 51, 1)'
             }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: 'rgba(14, 42, 51, 1)'
-                    },
-                    grid: {
+        };
+
+        console.log('----------------------------------------------')
+        console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
+        console.log(resposta)
+
+        // Inserindo valores recebidos em estrutura para plotar o gráfico
+        for (i = 0; i < resposta.length; i++) {
+            var registro = resposta[i];
+            labels.push(registro.periodo);
+            dados.datasets.data.push(registro.quantidade);
+        }
+
+        console.log('----------------------------------------------')
+        console.log('O gráfico será plotado com os respectivos valores:')
+        console.log('Labels:')
+        console.log(labels)
+        console.log('Dados:')
+        console.log(dados.datasets)
+        console.log('----------------------------------------------')
+
+        // Criando estrutura para plotar gráfico - config
+        const config = {
+            type: 'bar',
+            data: dados,
+            options: {
+                plugins: {
+                    legend: {
                         display: false
                     }
                 },
-                y: {
-                    ticks: {
-                        color: 'rgba(14, 42, 51, 1)'
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'rgba(14, 42, 51, 1)'
+                        },
+                        grid: {
+                            display: false
+                        }
                     },
-                    beginAtZero: true,
-                    grid: {
-                        display: false
+                    y: {
+                        ticks: {
+                            color: 'rgba(14, 42, 51, 1)'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            display: false
+                        }
                     }
                 }
             }
-        }
-    });
+        };
+
+        // Adicionando gráfico criado em div na tela
+        let myChart = new Chart(
+            document.getElementById(`myChartCanvasHistorico`),
+            config
+        );
+
+        setTimeout(() => atualizarGrafico(historico, dados, myChart), 2000);
+    }
+
+    function atualizarGrafico(historico, dados, myChart) {
+        fetch(`/medidas/tempo-real/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (novoRegistro) {
+
+                    obterdados(historico);
+                    // alertar(novoRegistro, historico);
+                    console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
+                    console.log(`Dados atuais do gráfico:`);
+                    console.log(dados);
+
+                    let avisoCaptura = document.getElementById(`avisoCaptura${historico}`)
+                    avisoCaptura.innerHTML = ""
+
+
+                    if (novoRegistro[0].quantidade == dados.labels[0]) {
+                        console.log("---------------------------------------------------------------")
+                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
+                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
+                        console.log("Horário do novo dado capturado:")
+                        console.log(novoRegistro[0].momento_grafico)
+                        console.log("Horário do último dado capturado:")
+                        console.log(dados.labels[dados.labels.length - 1])
+                        console.log("---------------------------------------------------------------")
+                    } else {
+                        // tirando e colocando valores no gráfico
+                        for (let i = 0; i < 12; i++) {
+                            dados.labels.shift(); // apagar o primeiro
+                            dados.datasets.data.shift();  // apagar o primeiro de umidade
+                        }
+                        for (i = 0; i < resposta.length; i++) {
+                            var registro = resposta[i];
+                            dados.labels.push(novoRegistro[i].periodo);
+                            dados.datasets.data.push(novoRegistro[i].quantidade);
+                        }
+
+                        myChart.update();
+                    }
+
+                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                    proximaAtualizacao = setTimeout(() => atualizarGrafico(historico, dados, myChart), 2000);
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
+                proximaAtualizacao = setTimeout(() => atualizarGrafico(historico, dados, myChart), 2000);
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+
+    }
 </script>
 
 </html>
+
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+datasets: [{
+label: '',
+data: [12, 19, 3, 5, 2, 3],
+borderWidth: 1,
+backgroundColor: 'rgba(14, 42, 51, 1)'
+}]
+},
+options: {
+plugins: {
+legend: {
+display: false
+}
+},
+scales: {
+x: {
+ticks: {
+color: 'rgba(14, 42, 51, 1)'
+},
+grid: {
+display: false
+}
+},
+y: {
+ticks: {
+color: 'rgba(14, 42, 51, 1)'
+},
+beginAtZero: true,
+grid: {
+display: false
+}
+}
+}
+}
+});

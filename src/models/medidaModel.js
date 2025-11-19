@@ -1,35 +1,53 @@
 var database = require("../database/config");
 
-function buscarUltimasMedidas(idAquario, limite_linhas) {
+function buscarUltimasMedidas(historico, limite_linhas) {
 
-    var instrucaoSql = `SELECT 
-        dht11_temperatura as temperatura, 
-        dht11_umidade as umidade,
-                        momento,
-                        DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico
-                    FROM medida
-                    WHERE fk_aquario = ${idAquario}
-                    ORDER BY id DESC LIMIT ${limite_linhas}`;
+    var instrucaoSql = `SELECT
+        count(c.nome) as quantidade,
+        date_format(r.dtRegistro, '%m/%Y') as periodo,
+        r.usuario_idUsuario as Usuario
+            from criatura as c
+                join registro as r
+                    on c.idCriatura = r.criatura_idCriatura
+                        where r.usuario_idUsuario = ${historico}
+                            group by periodo, Usuario 
+                                order by periodo limit ${limite_linhas}`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
-function buscarMedidasEmTempoReal(idAquario) {
+function buscarMedidasEmTempoReal(historico) {
 
+    var instrucaoSql = `SELECT
+        count(c.nome) as quantidade,
+        date_format(r.dtRegistro, '%m/%Y') as periodo,
+        r.usuario_idUsuario as Usuario
+            from criatura as c
+                join registro as r
+                    on c.idCriatura = r.criatura_idCriatura
+                        where r.usuario_idUsuario = ${historico}
+                            group by periodo, Usuario 
+                                order by periodo limit ${limite_linhas}`;
+
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscarUltimasCriaturas(historico) {
     var instrucaoSql = `SELECT 
-        dht11_temperatura as temperatura, 
-        dht11_umidade as umidade,
-                        DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico, 
-                        fk_aquario 
-                        FROM medida WHERE fk_aquario = ${idAquario} 
-                    ORDER BY id DESC LIMIT 1`;
-
+    nome as criatura
+    FROM criatura
+    WHERE id = ${historico}
+    ORDER BY id DESC LIMIT 5`;
+    
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 module.exports = {
     buscarUltimasMedidas,
-    buscarMedidasEmTempoReal
+    buscarMedidasEmTempoReal,
+    buscarUltimasCriaturas
 }
