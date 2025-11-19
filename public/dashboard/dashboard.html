@@ -35,7 +35,7 @@
                 <div class="criaturasMensal">
                     <h2>Quantidade de criaturas registradas ao longo do ano</h2>
                     <div class="grafico">
-                        <canvas id="myChartHistorico"></canvas>
+                        <canvas id="myChartCanvasHistorico"></canvas>
                     </div>
                 </div>
                 <div class="ultimasCriaturas">
@@ -56,7 +56,6 @@
     let proximaAtualizacao;
 
     window.onload = exibirGrafico();
-    window.onload = exibirUltimasCriaturas(historico);
 
     function exibirUltimasCriaturas(historico) {
         let criaturas = [];
@@ -64,7 +63,6 @@
             if (response.ok) {
                 response.json().then(function (lista) {
                     console.log(`Dados recebidos: ${JSON.stringify(lista)}`);
-                    lista.reverse();
 
                     for (i = 0; i < lista.length; i++) {
                         var registro = lista[i];
@@ -82,9 +80,9 @@
                 console.error('Nenhum dado encontrado ou erro na API');
             }
         })
-        .catch(function (error) {
-            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-        });
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
         setTimeout(() => exibirUltimasCriaturas(historico), 2000);
     }
 
@@ -102,18 +100,18 @@
             if (response.ok) {
                 response.json().then(function (resposta) {
                     console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    resposta.reverse();
-
+                    
                     plotarGrafico(resposta, historico);
-
+                    
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
             }
         })
-            .catch(function (error) {
-                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-            });
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+        exibirUltimasCriaturas(historico);
     }
 
     function plotarGrafico(resposta, historico) {
@@ -142,7 +140,7 @@
         for (i = 0; i < resposta.length; i++) {
             var registro = resposta[i];
             labels.push(registro.periodo);
-            dados.datasets.data.push(registro.quantidade);
+            dados.datasets[0].data.push(registro.quantidade);
         }
 
         console.log('----------------------------------------------')
@@ -199,7 +197,6 @@
             if (response.ok) {
                 response.json().then(function (novoRegistro) {
 
-                    obterdados(historico);
                     // alertar(novoRegistro, historico);
                     console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
                     console.log(`Dados atuais do gráfico:`);
@@ -209,7 +206,7 @@
                     avisoCaptura.innerHTML = ""
 
 
-                    if (novoRegistro[0].quantidade == dados.labels[0]) {
+                    if (novoRegistro[0].periodo == dados.labels[dados.labels.length - 1]) {
                         console.log("---------------------------------------------------------------")
                         console.log("Como não há dados novos para captura, o gráfico não atualizará.")
                         avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
@@ -221,13 +218,13 @@
                     } else {
                         // tirando e colocando valores no gráfico
                         for (let i = 0; i < 12; i++) {
-                            dados.labels.shift(); // apagar o primeiro
-                            dados.datasets.data.shift();  // apagar o primeiro de umidade
+                            dados.labels.shift();
+                            dados.datasets[0].data.shift();
                         }
-                        for (i = 0; i < resposta.length; i++) {
-                            var registro = resposta[i];
+
+                        for (let i = 0; i < novoRegistro.length; i++) {
                             dados.labels.push(novoRegistro[i].periodo);
-                            dados.datasets.data.push(novoRegistro[i].quantidade);
+                            dados.datasets[0].data.push(novoRegistro[i].quantidade);
                         }
 
                         myChart.update();
@@ -250,44 +247,3 @@
 </script>
 
 </html>
-
-const ctx = document.getElementById('myChart');
-
-new Chart(ctx, {
-type: 'bar',
-data: {
-labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-datasets: [{
-label: '',
-data: [12, 19, 3, 5, 2, 3],
-borderWidth: 1,
-backgroundColor: 'rgba(14, 42, 51, 1)'
-}]
-},
-options: {
-plugins: {
-legend: {
-display: false
-}
-},
-scales: {
-x: {
-ticks: {
-color: 'rgba(14, 42, 51, 1)'
-},
-grid: {
-display: false
-}
-},
-y: {
-ticks: {
-color: 'rgba(14, 42, 51, 1)'
-},
-beginAtZero: true,
-grid: {
-display: false
-}
-}
-}
-}
-});

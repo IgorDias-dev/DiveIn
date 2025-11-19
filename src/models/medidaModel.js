@@ -28,7 +28,7 @@ function buscarMedidasEmTempoReal(historico) {
                     on c.idCriatura = r.criatura_idCriatura
                         where r.usuario_idUsuario = ${historico}
                             group by periodo, Usuario 
-                                order by periodo limit ${limite_linhas}`;
+                                order by periodo limit 12`;
 
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -36,11 +36,16 @@ function buscarMedidasEmTempoReal(historico) {
 }
 
 function buscarUltimasCriaturas(historico) {
-    var instrucaoSql = `SELECT 
-    nome as criatura
-    FROM criatura
-    WHERE id = ${historico}
-    ORDER BY id DESC LIMIT 5`;
+    var instrucaoSql = `SELECT
+    c.nome as criatura,
+    u.idUsuario as usuario
+        FROM criatura as c
+            join registro as r
+                on r.criatura_idCriatura = c.idCriatura
+                    join usuario as u
+                        on u.idUsuario = r.usuario_idUsuario
+                            where u.idUsuario = ${historico}
+                                ORDER BY r.criatura_idCriatura DESC LIMIT 5`;
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);

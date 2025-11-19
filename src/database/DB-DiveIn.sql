@@ -35,5 +35,5 @@ insert into criatura (imagem, nome, nomeCientifico, habitat, praia, uf, descrica
 insert into registro (usuario_idUsuario, criatura_idCriatura, idRegistro, dtRegistro) values
     (1, 1, 1, '2025-01-18'),
     (1, 2, 1, '2025-01-18'),
-    (1, 13, 1, '2025-11-18');
+    (1, 3, 1, '2025-11-18');
 SELECT count(c.nome) as quantidade, date_format(r.dtRegistro, '%m/%Y') as periodo from criatura as c join registro as r on c.idCriatura = r.criatura_idCriatura group by periodo order by periodo limit 12;
