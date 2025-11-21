@@ -49,10 +49,27 @@ function buscarUltimasCriaturas(historico) {
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
+
+}
+function buscarCriaturasVistas(historico) {
+    var instrucaoSql = `SELECT
+    c.nome as criatura,
+    u.idUsuario as usuario
+        FROM criatura as c
+            join registro as r
+                on r.criatura_idCriatura = c.idCriatura
+                    join usuario as u
+                        on u.idUsuario = r.usuario_idUsuario
+                            where u.idUsuario = ${historico}
+                                ORDER BY r.criatura_idCriatura DESC LIMIT 5`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
     buscarUltimasMedidas,
     buscarMedidasEmTempoReal,
-    buscarUltimasCriaturas
+    buscarUltimasCriaturas,
+    buscarCriaturasVistas
 }
