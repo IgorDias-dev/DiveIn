@@ -52,19 +52,17 @@ function buscarUltimasCriaturas(historico) {
 
 }
 function buscarCriaturasVistas(historico) {
-    var instrucaoSql = `SELECT
-    c.nome as criatura,
-    u.idUsuario as usuario
-        FROM criatura as c
-            join registro as r
-                on r.criatura_idCriatura = c.idCriatura
-                    join usuario as u
-                        on u.idUsuario = r.usuario_idUsuario
-                            where u.idUsuario = ${historico}
-                                ORDER BY r.criatura_idCriatura DESC LIMIT 5`;
+    var instrucaoSql = `select 
+    count(nome) as totalCriatura
+        from criatura`;
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    var instrucaoSql2 = `select
+        count(totalUsuario) as vistoUsuario
+            from criaturaUsuario`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql2);
+    return database.executar(instrucaoSql, instrucaoSql2);
 }
 
 module.exports = {
