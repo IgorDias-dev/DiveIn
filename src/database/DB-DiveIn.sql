@@ -160,11 +160,12 @@ insert into registro (usuario_idUsuario, criatura_idCriatura, idRegistro, dtRegi
 	(1, 44, 2, '2025-11-05 13:58:00'),
 	(1, 48, 2, '2025-11-08 16:47:00'),
 	(1, 51, 2, '2025-11-11 10:33:00'),
-	(1, 55, 2, '2025-11-15 09:12:00'),
+	(1, 54, 2, '2025-11-15 09:12:00'),
 	(1, 43, 2, '2025-11-18 12:41:00'),
 	(1, 45, 2, '2025-11-22 15:29:00'),
 	(1, 46, 2, '2025-11-27 08:55:00');
 SELECT count(c.nome) as quantidade, date_format(r.dtRegistro, '%Y/%m') as periodo from criatura as c join registro as r on c.idCriatura = r.criatura_idCriatura group by periodo order by periodo limit 12;
 select count(nome) as totalCriatura from criatura;
-create view criaturaUsuario as select distinct(criatura_idCriatura) as totalUsuario, usuario_idUsuario from registro group by criatura_idCriatura;
-select count(totalUsuario), usuario_idUsuario as vistoUsuario from criaturaUsuario;
+create view criaturaUsuario as select count(distinct criatura_idCriatura) as totalUsuario, usuario_idUsuario from registro group by usuario_idUsuario;
+select totalUsuario, usuario_idUsuario as usuario from criaturaUsuario where usuario_idUsuario = 1;
+create view datas as SELECT count(c.nome) as quantidade, date_format(r.dtRegistro, '%Y/%m') as periodo from criatura as c join registro as r on c.idCriatura = r.criatura_idCriatura group by periodo order by periodo limit 12;

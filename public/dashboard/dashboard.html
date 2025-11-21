@@ -28,8 +28,8 @@
             <div class="indicadores">
                 <div class="criaturasVistas">
                     <p>Você já viu</p>
-                    <h3>N%</h3>
-                    <h4>N de N</h4>
+                    <h3 id="porcentagemVista"></h3>
+                    <h4 id="quantidadeVista"></h4>
                     <p>de criaturas</p>
                 </div>
                 <div class="criaturasMensal">
@@ -54,6 +54,9 @@
 <script>
     saudacao.innerHTML += `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`;
     let proximaAtualizacao;
+    let criaturaKPI = 0;
+    let usuarioKPi = 0;
+
 
     window.onload = exibirGrafico();
 
@@ -74,6 +77,8 @@
                     criatura3.innerHTML = criaturas[2];
                     criatura4.innerHTML = criaturas[3];
                     criatura5.innerHTML = criaturas[4];
+                    quantidadeVista.innerHTML = `${usuarioKPi} de ${criaturaKPI}`;
+                    porcentagemVista.innerHTML = `${((usuarioKPi / criaturaKPI) * 100).toFixed(1)}%`;
 
                 });
             } else {
@@ -84,6 +89,54 @@
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
         setTimeout(() => exibirUltimasCriaturas(historico), 2000);
+    }
+
+    function buscarCriaturasVistas(historico) {
+        fetch(`/medidas/criaturas-vistas/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (usuarioCriatura) {
+                    console.log(`Dados recebidos: ${JSON.stringify(usuarioCriatura)}`);
+                    var totalUsuario = [];
+                    for (let i = 0; i < usuarioCriatura.length; i++) {
+                        var registro = usuarioCriatura[i]
+                        totalUsuario.push(registro.totalUsuario);
+                        usuarioKPi = totalUsuario[0];
+                        console.log(totalUsuario[0])
+                    }
+                    
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+        setTimeout(() => buscarCriaturasVistas(historico), 2000);
+    }
+    
+    function buscarTotal(historico) {
+        fetch(`/medidas/criaturas-total/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (total) {
+                    console.log(`Dados recebidos: ${JSON.stringify(total)}`);
+                    var totalCriatura = [];
+                    for (let i = 0; i < total.length; i++) {
+                        var registro = total[i];
+                        totalCriatura.push(registro.totalCriatura);
+                        criaturaKPI = totalCriatura[0];
+                        console.log(totalCriatura[0])
+                    }
+
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
+        setTimeout(() => buscarTotal(historico), 2000);
     }
 
     function exibirGrafico() {
@@ -100,18 +153,20 @@
             if (response.ok) {
                 response.json().then(function (resposta) {
                     console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                    
+
                     plotarGrafico(resposta, historico);
-                    
+
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
             }
         })
-        .catch(function (error) {
-            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
-        });
+            .catch(function (error) {
+                console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+            });
         exibirUltimasCriaturas(historico);
+        buscarTotal(historico);
+        buscarCriaturasVistas(historico);
     }
 
     function plotarGrafico(resposta, historico) {

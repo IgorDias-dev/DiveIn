@@ -15,4 +15,12 @@ router.get("/ultimas-criaturas/:historico", function (req, res) {
     medidaController.buscarUltimasCriaturas(req, res);
 })
 
+router.get("/criaturas-vistas/:historico", function (req, res) {
+    medidaController.buscarCriaturasVistas(req, res);
+})
+
+router.get("/criaturas-total/:historico", function (req, res) {
+    medidaController.buscarTotal(req, res);
+})
+
 module.exports = router;

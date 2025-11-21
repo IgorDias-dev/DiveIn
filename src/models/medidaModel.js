@@ -6,7 +6,7 @@ function buscarUltimasMedidas(historico, limite_linhas) {
         count(c.nome) as quantidade,
         date_format(r.dtRegistro, '%m/%Y') as periodo,
         r.usuario_idUsuario as Usuario
-            from criatura as c
+            FROM criatura as c
                 join registro as r
                     on c.idCriatura = r.criatura_idCriatura
                         where r.usuario_idUsuario = ${historico}
@@ -23,7 +23,7 @@ function buscarMedidasEmTempoReal(historico) {
         count(c.nome) as quantidade,
         date_format(r.dtRegistro, '%m/%Y') as periodo,
         r.usuario_idUsuario as Usuario
-            from criatura as c
+            FROM criatura as c
                 join registro as r
                     on c.idCriatura = r.criatura_idCriatura
                         where r.usuario_idUsuario = ${historico}
@@ -52,22 +52,29 @@ function buscarUltimasCriaturas(historico) {
 
 }
 function buscarCriaturasVistas(historico) {
-    var instrucaoSql = `select 
-    count(nome) as totalCriatura
-        from criatura`;
+    var instrucaoSql = `SELECT
+        totalUsuario,
+        usuario_idUsuario as usuario
+            FROM criaturaUsuario
+                where usuario_idUsuario = ${historico}`;
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    var instrucaoSql2 = `select
-        count(totalUsuario) as vistoUsuario
-            from criaturaUsuario`;
+    return database.executar(instrucaoSql);
+}
+
+function buscarTotal(historico) {
+    var instrucaoSql = `SELECT 
+    count(nome) as totalCriatura
+        FROM criatura`;
     
-    console.log("Executando a instrução SQL: \n" + instrucaoSql2);
-    return database.executar(instrucaoSql, instrucaoSql2);
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
     buscarUltimasMedidas,
     buscarMedidasEmTempoReal,
     buscarUltimasCriaturas,
-    buscarCriaturasVistas
+    buscarCriaturasVistas,
+    buscarTotal
 }
