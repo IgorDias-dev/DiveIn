@@ -71,31 +71,33 @@
                         var registro = lista[i];
                         criaturas.push(registro.criatura);
                     }
-                    if (criaturas[0] == '') {
+                    if (!criaturas[0]) {
                         criatura1.innerHTML = '-';
                     } else {
                         criatura1.innerHTML = criaturas[0];
                     }
-                    if (criaturas[1] == '') {
+                    if (!criaturas[1]) {
                         criatura2.innerHTML = '-';
                     } else {
                     criatura2.innerHTML = criaturas[1];
                     }
-                    if (criaturas[2] == '') {
+                    if (!criaturas[2]) {
                         criatura3.innerHTML = '-';
                     } else {
                         criatura3.innerHTML = criaturas[2];
                     }
-                    if (criaturas[3] == '') {
+                    if (!criaturas[3]) {
                         criatura4.innerHTML = '-';
                     } else {
                         criatura4.innerHTML = criaturas[3];
                     }
-                    if (criaturas[4] == '') {
+                    if (!criaturas[4]) {
                         criatura5.innerHTML = '-';
                     } else {
                         criatura5.innerHTML = criaturas[4];
                     }
+                    console.log(usuarioKPi)
+                    console.log(criaturaKPI)
                     quantidadeVista.innerHTML = `${usuarioKPi} de ${criaturaKPI}`;
                     porcentagemVista.innerHTML = `${((usuarioKPi / criaturaKPI) * 100).toFixed(1)}%`;
 
@@ -161,6 +163,9 @@
     function exibirGrafico() {
         var historico = JSON.parse(sessionStorage.ID_USUARIO);
         obterDadosGrafico(historico);
+        exibirUltimasCriaturas(historico);
+        buscarTotal(historico);
+        buscarCriaturasVistas(historico);
     }
 
     function obterDadosGrafico(historico) {
@@ -183,9 +188,6 @@
             .catch(function (error) {
                 console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
             });
-        exibirUltimasCriaturas(historico);
-        buscarTotal(historico);
-        buscarCriaturasVistas(historico);
     }
 
     function plotarGrafico(resposta, historico) {

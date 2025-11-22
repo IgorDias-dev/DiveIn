@@ -9,7 +9,7 @@ create table usuario (
 );
 create table criatura (
 	idCriatura int primary key auto_increment,
-    imagem varchar (100),
+    imagem varchar (1000),
     nome varchar (100) not null,
     nomeCientifico varchar (100),
     habitat varchar (1000),
@@ -167,5 +167,5 @@ insert into registro (usuario_idUsuario, criatura_idCriatura, idRegistro, dtRegi
 SELECT count(c.nome) as quantidade, date_format(r.dtRegistro, '%Y/%m') as periodo from criatura as c join registro as r on c.idCriatura = r.criatura_idCriatura group by periodo order by periodo limit 12;
 select count(nome) as totalCriatura from criatura;
 create view criaturaUsuario as select count(distinct criatura_idCriatura) as totalUsuario, usuario_idUsuario from registro group by usuario_idUsuario;
-select totalUsuario, usuario_idUsuario as usuario from criaturaUsuario where usuario_idUsuario = 1;
+select ifnull(max(totalUsuario), 0) as totalUsuario, usuario_idUsuario as usuario from criaturaUsuario where usuario_idUsuario = 1;
 create view datas as SELECT count(c.nome) as quantidade, date_format(r.dtRegistro, '%Y/%m') as periodo from criatura as c join registro as r on c.idCriatura = r.criatura_idCriatura group by periodo order by periodo limit 12;

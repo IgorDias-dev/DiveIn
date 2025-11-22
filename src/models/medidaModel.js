@@ -39,8 +39,8 @@ function buscarUltimasCriaturas(historico) {
     var instrucaoSql = `SELECT
     c.nome as criatura,
     u.idUsuario as usuario
-        FROM criatura as c
-            join registro as r
+        FROM registro as r
+            join criatura as c
                 on r.criatura_idCriatura = c.idCriatura
                     join usuario as u
                         on u.idUsuario = r.usuario_idUsuario
@@ -53,8 +53,8 @@ function buscarUltimasCriaturas(historico) {
 }
 function buscarCriaturasVistas(historico) {
     var instrucaoSql = `SELECT
-        totalUsuario,
-        usuario_idUsuario as usuario
+        ifnull(max(totalUsuario), 0) as totalUsuario,
+        ${historico} as usuario
             FROM criaturaUsuario
                 where usuario_idUsuario = ${historico}`;
     
