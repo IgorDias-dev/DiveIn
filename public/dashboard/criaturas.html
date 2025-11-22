@@ -22,9 +22,108 @@
 
 <body>
     <div class="container">
-        <div class="text">
+        <div class="elementos">
+            <h1>CRIATURAS</h1>
+            <div class="selecione"><p><b>Selecione a criatura</b>:</p><select onchange="selecionar()" class="criatura" id="slCriatura">
+                <option value="#">Selecione</option>
+            </select></div>
+            <div class="dados">
+                <div class="imagem" id="imagem">
+                    <img src="https://cembra.org.br/sites/default/files/2025-05/fundo-do-oceano.jpg" alt="Selecione uma criatura">
+                </div>
+                <div class="texto" id="texto">
+                    <p><b>Nome:</b></p>
+                    <p><b>Nome científico:</b></p>
+                    <p><b>Habitat:</b></p>
+                    <p><b>Localização:</b></p>
+                    <p><b>Vezes que foi avistada no ultimo mês:</b></p>
+                    <p><b>Descrição:</b></p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
-
+<script>
+    var historico = JSON.parse(sessionStorage.ID_USUARIO);
+    var avistado = '';
+    var idCriatura = '';
+    window.onload = buscarNome();
+    function selecionar() {
+        if (slCriatura.value == '#') {
+            texto.innerHTML = `<p><b>Nome:</b></p>
+                    <p><b>Nome científico:</b></p>
+                    <p><b>Habitat:</b></p>
+                    <p><b>Localização:</b></p>
+                    <p><b>Vezes que foi avistada no ultimo mês:</b></p>
+                    <p><b>Descrição:</b></p>`;
+                } else {
+                    idCriatura = slCriatura.value;
+                    buscarQuantidade(historico);
+                    buscarRegistro(historico);
+        }
+    }
+    function buscarNome(historico) {
+        fetch(`/medidas/lista-criatura/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (lista) {
+                    console.log(`Dados recebidos: ${JSON.stringify(lista)}`);
+                    for (let i = 0; i < lista.length; i++) {
+                        let nomeCriatura = lista[i];
+                        slCriatura.innerHTML += `<option value="${nomeCriatura.nome}">${nomeCriatura.nome}</option>`;
+                    }
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+    function buscarQuantidade(historico) {
+        fetch(`/medidas/quantidade-criatura/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (lista) {
+                    console.log(`Dados recebidos: ${JSON.stringify(lista)}`);
+                    for (let i = 0; i < lista.length; i++) {
+                        let nomeCriatura = lista[i];
+                        avistado = lista[i].avistado;
+                    }
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+    function buscarRegistro(historico) {
+        fetch(`/medidas/descricao-criatura/${historico}`, { cache: 'no-store' }).then(function (response) {
+            if (response.ok) {
+                response.json().then(function (lista) {
+                    console.log(`Dados recebidos: ${JSON.stringify(lista)}`);
+                    for (let i = 0; i < lista.length; i++) {
+                        let nomeCriatura = lista[i];
+                        if (nomeCriatura.nome == idCriatura) {
+                            texto.innerHTML = `<p><b>Nome:</b> ${nomeCriatura.nome}</p>
+                                    <p><b>Nome científico:</b> ${nomeCriatura.nomeCientifico}</p>
+                                    <p><b>Habitat:</b> ${nomeCriatura.habitat}</p>
+                                    <p><b>Localização:</b> ${nomeCriatura.localizacao}</p>
+                                    <p><b>Vezes que foi avistada no ultimo mês:</b> ${avistado}</p>
+                                    <p><b>Descrição:</b> ${nomeCriatura.descricao}</p>`;
+                            imagem.innerHTML = `<img src="${nomeCriatura.foto}" alt="Foto de ${nomeCriatura.nome}">`;
+                            break;
+                        }
+                    }
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+</script>
 </html>

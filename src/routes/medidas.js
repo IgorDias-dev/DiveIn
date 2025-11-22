@@ -23,4 +23,16 @@ router.get("/criaturas-total/:historico", function (req, res) {
     medidaController.buscarTotal(req, res);
 })
 
+router.get("/lista-criatura/:historico", function (req, res) {
+    medidaController.buscarNome(req, res);
+})
+
+router.get("/descricao-criatura/:historico", function (req, res) {
+    medidaController.buscarRegistro(req, res);
+})
+
+router.get("/quantidade-criatura/:historico", function (req, res) {
+    medidaController.buscarQuantidade(req, res);
+})
+
 module.exports = router;

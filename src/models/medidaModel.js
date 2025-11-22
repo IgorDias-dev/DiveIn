@@ -71,10 +71,53 @@ function buscarTotal(historico) {
     return database.executar(instrucaoSql);
 }
 
+function buscarNome(historico) {
+    var instrucaoSql = `SELECT 
+    nome
+        FROM criatura
+            order by nome`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscarRegistro(historico) {
+    var instrucaoSql = `SELECT 
+    imagem as foto,
+    nome,
+    nomeCientifico,
+    habitat,
+    concat(praia, ' - ', uf) as localizacao,
+    descricao
+        from criatura`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscarQuantidade(historico) {
+    var instrucaoSql = `SELECT
+    count(date_format(r.dtRegistro, '%Y/%m')) as avistado,
+    c.nome
+        from registro as r
+            join criatura as c
+                on r.criatura_idCriatura = c.idCriatura
+                    where c.nome = 'Garoupa'
+                        group by r.dtRegistro
+                            order by r.dtRegistro desc
+                                limit 1`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     buscarUltimasMedidas,
     buscarMedidasEmTempoReal,
     buscarUltimasCriaturas,
     buscarCriaturasVistas,
-    buscarTotal
+    buscarTotal,
+    buscarNome,
+    buscarRegistro,
+    buscarQuantidade
 }
