@@ -71,12 +71,31 @@
                         var registro = lista[i];
                         criaturas.push(registro.criatura);
                     }
-
-                    criatura1.innerHTML = criaturas[0];
+                    if (criaturas[0] == '') {
+                        criatura1.innerHTML = '-';
+                    } else {
+                        criatura1.innerHTML = criaturas[0];
+                    }
+                    if (criaturas[1] == '') {
+                        criatura2.innerHTML = '-';
+                    } else {
                     criatura2.innerHTML = criaturas[1];
-                    criatura3.innerHTML = criaturas[2];
-                    criatura4.innerHTML = criaturas[3];
-                    criatura5.innerHTML = criaturas[4];
+                    }
+                    if (criaturas[2] == '') {
+                        criatura3.innerHTML = '-';
+                    } else {
+                        criatura3.innerHTML = criaturas[2];
+                    }
+                    if (criaturas[3] == '') {
+                        criatura4.innerHTML = '-';
+                    } else {
+                        criatura4.innerHTML = criaturas[3];
+                    }
+                    if (criaturas[4] == '') {
+                        criatura5.innerHTML = '-';
+                    } else {
+                        criatura5.innerHTML = criaturas[4];
+                    }
                     quantidadeVista.innerHTML = `${usuarioKPi} de ${criaturaKPI}`;
                     porcentagemVista.innerHTML = `${((usuarioKPi / criaturaKPI) * 100).toFixed(1)}%`;
 
