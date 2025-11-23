@@ -4,7 +4,7 @@ function buscarUltimasMedidas(historico, limite_linhas) {
 
     var instrucaoSql = `SELECT
         count(c.nome) as quantidade,
-        date_format(r.dtRegistro, '%m/%Y') as periodo,
+        date_format(r.dtRegistro, '%Y/%m') as periodo,
         r.usuario_idUsuario as Usuario
             FROM criatura as c
                 join registro as r
@@ -21,7 +21,7 @@ function buscarMedidasEmTempoReal(historico) {
 
     var instrucaoSql = `SELECT
         count(c.nome) as quantidade,
-        date_format(r.dtRegistro, '%m/%Y') as periodo,
+        date_format(r.dtRegistro, '%Y/%m') as periodo,
         r.usuario_idUsuario as Usuario
             FROM criatura as c
                 join registro as r
@@ -45,7 +45,7 @@ function buscarUltimasCriaturas(historico) {
                     join usuario as u
                         on u.idUsuario = r.usuario_idUsuario
                             where u.idUsuario = ${historico}
-                                ORDER BY r.criatura_idCriatura DESC LIMIT 5`;
+                                ORDER BY r.idRegistro DESC LIMIT 5`;
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -81,13 +81,25 @@ function buscarNome(historico) {
     return database.executar(instrucaoSql);
 }
 
+function buscarNomeId(historico) {
+    var instrucaoSql = `SELECT 
+    idCriatura as id,
+    nome
+        FROM criatura
+            order by nome`;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 function buscarRegistro(historico) {
     var instrucaoSql = `SELECT 
     imagem as foto,
     nome,
     nomeCientifico,
     habitat,
-    concat(praia, ' - ', uf) as localizacao,
+    praia,
+    uf,
     descricao
         from criatura`;
     
@@ -119,5 +131,6 @@ module.exports = {
     buscarTotal,
     buscarNome,
     buscarRegistro,
-    buscarQuantidade
+    buscarQuantidade,
+    buscarNomeId
 }

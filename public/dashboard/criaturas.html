@@ -15,7 +15,7 @@
         </div>
         <div class="opcoesR">
             <a href="dashboard.html" class="normal">DASHBOARD</a>
-            <a href="" class="inOut">SAIR</a>
+            <a onclick="limparSessao()" class="inOut">SAIR</a>
         </div>
     </div>
 </header>
@@ -109,7 +109,7 @@
                             texto.innerHTML = `<p><b>Nome:</b> ${nomeCriatura.nome}</p>
                                     <p><b>Nome científico:</b> ${nomeCriatura.nomeCientifico}</p>
                                     <p><b>Habitat:</b> ${nomeCriatura.habitat}</p>
-                                    <p><b>Localização:</b> ${nomeCriatura.localizacao}</p>
+                                    <p><b>Localização:</b> ${nomeCriatura.praia} - ${nomeCriatura.uf}</p>
                                     <p><b>Vezes que foi avistada no ultimo mês:</b> ${avistado}</p>
                                     <p><b>Descrição:</b> ${nomeCriatura.descricao}</p>`;
                             imagem.innerHTML = `<img src="${nomeCriatura.foto}" alt="Foto de ${nomeCriatura.nome}">`;

@@ -27,6 +27,10 @@ router.get("/lista-criatura/:historico", function (req, res) {
     medidaController.buscarNome(req, res);
 })
 
+router.get("/lista-id/:historico", function (req, res) {
+    medidaController.buscarNomeId(req, res);
+})
+
 router.get("/descricao-criatura/:historico", function (req, res) {
     medidaController.buscarRegistro(req, res);
 })

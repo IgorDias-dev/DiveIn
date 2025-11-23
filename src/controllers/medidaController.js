@@ -116,6 +116,25 @@ function buscarNome(req, res) {
     });
 }
 
+function buscarNomeId(req, res) {
+
+    var historico = req.params.historico;
+
+    console.log(`Recuperando total de criaturas vistas pelo usuario`);
+
+    medidaModel.buscarNomeId(historico).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas criaturas.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function buscarRegistro(req, res) {
 
     var historico = req.params.historico;
@@ -162,5 +181,6 @@ module.exports = {
     buscarTotal,
     buscarNome,
     buscarRegistro,
-    buscarQuantidade
+    buscarQuantidade,
+    buscarNomeId
 }

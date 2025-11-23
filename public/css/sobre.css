@@ -80,14 +80,37 @@ body {
         & .text {
             margin-top: 5%;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
             color: white;
             width: 60%;
             height: 75%;
             background-color: #0e2a33ce;
+            border-radius: 10px;
+            & .texto {
+                display: flex;
+                height: 100%;
+                width: 40%;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            & .imagem {
+                width: 50%;
+                height: 100%;
+                display: flex;
+                justify-content: right;
+                align-items: center;
+                & img {
+                    border-radius: 10px;
+                    max-width: 80%;
+                    max-height: 80%;
+                }
+            }
         }
         & .text p{
-            font-size: 20px;
+            font-size: 15px;
         }
         & .text h1{
             font-size: 64px;

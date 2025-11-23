@@ -1,5 +1,4 @@
 var usuarioModel = require("../models/usuarioModel");
-var aquarioModel = require("../models/aquarioModel");
 
 function autenticar(req, res) {
     var email = req.body.emailServer;
@@ -79,7 +78,88 @@ function cadastrar(req, res) {
     }
 }
 
+function cadastrarCriatura(req, res) {
+    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+    var nome = req.body.nomeCriaturaServer;
+    var nomeCientifico = req.body.nomeCientificoServer;
+    var habitat = req.body.habitatServer;
+    var praia = req.body.praiaServer;
+    var criaturaUF = req.body.UFServer;
+    var imagem = req.body.imagemServer;
+    var descricao = req.body.descricaoServer;
+
+    // Faça as validações dos valores
+    if (nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (nomeCientifico == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (habitat == undefined) {
+        res.status(400).send("Sua senha está undefined!");
+    } else if (praia == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (criaturaUF == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (imagem == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (descricao == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        usuarioModel.cadastrarCriatura(imagem, nome, nomeCientifico, habitat, praia, criaturaUF, descricao)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+function registrar(req, res) {
+    // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+    var idUsuario = req.body.idUsuarioServer;
+    var idCriatura = req.body.idCriaturaServer;
+    console.log(idUsuario + ' usuario')
+    console.log(idCriatura + ' criatura')
+
+    // Faça as validações dos valores
+    if (idUsuario == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (idCriatura == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else {
+
+        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        usuarioModel.registrar(idUsuario, idCriatura)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    cadastrarCriatura,
+    registrar
 }
