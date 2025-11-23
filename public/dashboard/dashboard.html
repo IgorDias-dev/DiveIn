@@ -17,7 +17,7 @@
         </div>
         <div class="opcoesR">
             <a href="criaturas.html" class="normal">CRIATURAS</a>
-            <a onclick="limparSessao()" class="inOut">SAIR</a>
+            <a href="" onclick="limparSessao()" class="inOut">SAIR</a>
         </div>
     </div>
 </header>
@@ -443,14 +443,17 @@
                     console.log(dados);
 
                     if (novoRegistro[0].periodo == dados.labels[dados.labels.length - 1]) {
-                        console.log("---------------------------------------------------------------")
-                        console.log("Como não há dados novos para captura, o gráfico não atualizará.")
-                        avisoCaptura.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Foi trazido o dado mais atual capturado pelo sensor. <br> Como não há dados novos a exibir, o gráfico não atualizará."
-                        console.log("Horário do novo dado capturado:")
-                        console.log(novoRegistro[0].momento_grafico)
-                        console.log("Horário do último dado capturado:")
-                        console.log(dados.labels[dados.labels.length - 1])
-                        console.log("---------------------------------------------------------------")
+                        for (let i = 0; i < 12; i++) {
+                            dados.labels.shift();
+                            dados.datasets[0].data.shift();
+                        }
+
+                        for (let i = 0; i < novoRegistro.length; i++) {
+                            dados.labels.push(novoRegistro[i].periodo);
+                            dados.datasets[0].data.push(novoRegistro[i].quantidade);
+                        }
+
+                        myChart.update();
                     } else {
                         // tirando e colocando valores no gráfico
                         for (let i = 0; i < 12; i++) {
