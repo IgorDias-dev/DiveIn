@@ -25,18 +25,23 @@
 <body onload="validarSessao()">
     <div class="popup" id="formulario">
         <div class="form">
-            <div class="registrar">
+            <div class="registrar" id="registro">
+                <div class="botao">
+                    <button onclick="fechar()">X</button>
+                </div>
                 <h2>REGISTRAR UMA CRIATURA</h2>
+                <p>Selecione abaixo a criatura que foi avistada durante seu mergulho</p>
                 <div class="selecione">
-                    <p>Selecione uma criatura:</p>
                     <select class="criatura" id="slCriatura">
                         <option value="#">Selecione</option>
                     </select>
                     <button onclick="registrar()">REGISTRAR</button>
                 </div>
                 <p id="msg"></p>
+                <p>Se a criatura avistada não estiver listada acima você pode cadastrar uma nova criatura no botão abaixo</p>
+                <button onclick="registrar()">CADASTRAR NOVA CRIATURA</button>
             </div>
-            <div class="cadastro">
+            <div class="cadastro" id="cadastro">
                 <h2>CADASTRAR UMA NOVA CRIATURA</h2>
                 <div class="inp">
                     <div class="sub um">
@@ -73,9 +78,6 @@
                 <button onclick="cadastrarCriatura()">CADASTRAR</button>
                 <p id="info"></p>
             </div>
-            <div class="botao">
-                <button onclick="fechar()">FECHAR</button>
-            </div>
         </div>
     </div>
     <div class="container">
@@ -95,13 +97,13 @@
                     </div>
                 </div>
                 <div class="ultimasCriaturas">
-                    <h2>Ultimas criaturas avistadas</h2>
+                    <h2>Últimas criaturas avistadas</h2>
                     <p id="criatura1"></p>
                     <p id="criatura2"></p>
                     <p id="criatura3"></p>
                     <p id="criatura4"></p>
                     <p id="criatura5"></p>
-                    <button onclick="abrir()">ADICIONAR CRIATURA</button>
+                    <button onclick="abrir()">REGISTRAR CRIATURA</button>
                 </div>
             </div>
         </div>
@@ -118,13 +120,14 @@
 
     function abrir() {
         formulario.style.display = 'flex';
+        registro.style.display = 'flex';
         buscarNomeId(historico);
     }
-
+    
     function fechar() {
         formulario.style.display = 'none';
     }
-
+    
     function cadastrarCriatura() {
         if (iptNome.value == '' || iptNomeCientifico.value == '' || iptHabitat.value == '' || iptPraia.value == '' || iptUF.value == '' || iptImagem.value == '' || iptDescricao.value == '') {
             info.innerHTML = `Todos os campos precisam ser preenchidos`;
@@ -171,6 +174,7 @@
                 });
             return false;
         }
+        buscarNomeId(historico);
     }
 
     function registrar() {

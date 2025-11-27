@@ -23,6 +23,11 @@
 </header>
 
 <body>
+    <div class="popup" id="popup">
+        <div class="mensagemCadastro">
+            <p id="corpoMensagem"></p>
+        </div>
+    </div>
     <div class="container">
         <div class="text">
             <h1>ENTRAR</h1>
@@ -75,6 +80,11 @@
                     console.log("Houve um erro ao tentar realizar o login!");
 
                     resposta.text().then(texto => {
+                        corpoMensagem.innerHTML = 'E-mail e/ ou senha incorretos';
+                        popup.style.display = 'flex';
+                        setTimeout(() => {
+                            popup.style.display = 'none';
+                        }, "2000");
                         console.error(texto);
                         finalizarAguardar(texto);
                     });

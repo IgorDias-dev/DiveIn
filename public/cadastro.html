@@ -23,6 +23,11 @@
 </header>
 
 <body>
+    <div class="popup" id="popup">
+        <div class="mensagemCadastro">
+            <p id="corpoMensagem"></p>
+        </div>
+    </div>
     <div class="container">
         <div class="text">
             <h1>CADASTRO</h1>
@@ -54,7 +59,8 @@
     function verificarNome() {
         let nome = iptNome.value;
         if (nome.length <= 2 || nome == '') {
-            erroNome.innerHTML = 'Insira um nome';
+            validarNome = false;
+            erroNome.innerHTML = 'Insira um nome com mais de 3 letras';
         } else {
             erroNome.innerHTML = '';
             validarNome = true;
@@ -63,7 +69,8 @@
     function verificarSobrenome() {
         let sobrenome = iptSobrenome.value;
         if (sobrenome.length <= 2 || sobrenome == '') {
-            erroSobrenome.innerHTML = 'Insira um sobrenome';
+            validarSobrenome = false;
+            erroSobrenome.innerHTML = 'Insira um sobrenome com mais de 3 letras';
         } else {
             erroSobrenome.innerHTML = '';
             validarSobrenome = true;
@@ -72,10 +79,11 @@
     function verificarEmail() {
         let email = iptEmail.value;
         for (let i = 0; i < email.length; i++) {
-            if (email.includes('@') && email.includes('.com')) {
+            if (email.includes('@') && (email.includes('.com') || email.includes('.school'))) {
                 validarEmail = true;
                 erroEmail.innerHTML = '';
             } else {
+                validarEmail = false;
                 erroEmail.innerHTML = 'Preencha com um email válido';
             }
         }
@@ -99,30 +107,39 @@
             if (senha.includes(maiuscula[i])) {
                 validarMaiuscula = true;
                 break;
+            } else {
+                validarMaiuscula = false;
             }
         }
         for (let i = 0; i < minuscula.length; i++) {
             if (senha.includes(minuscula[i])) {
                 validarMinuscula = true;
                 break;
+            } else {
+                validarMinuscula = false;
             }
         }
         for (let i = 0; i < numero.length; i++) {
             if (senha.includes(numero[i])) {
                 validarNumero = true;
                 break;
+            } else {
+                validarNumero = false;
             }
         }
         for (let i = 0; i < especial.length; i++) {
             if (senha.includes(especial[i])) {
                 validarEspecial = true;
                 break;
+            } else {
+                validarEspecial = false;
             }
         }
         if (validarMaiuscula && validarMinuscula && validarNumero && validarEspecial) {
             validarSenha = true;
             erroSenha.innerHTML = '';
         } else {
+            validarSenha = false;
             erroSenha.innerHTML = 'Deve conter 8 caracteres ou mais, 1 letra maiúscula, 1 letra minúscula, 1 numero e 1 caracter especial';
         }
     }
@@ -131,6 +148,7 @@
             validarRepetir = true;
             erroRepetir.innerHTML = '';
         } else {
+            validarRepetir = false;
             erroRepetir.innerHTML = 'As senhas devem ser iguais';
         }
     }
@@ -159,9 +177,11 @@
                     console.log("resposta: ", resposta);
 
                     if (resposta.ok) {
+                        corpoMensagem.innerHTML = 'Cadastro realizado com sucesso!';
+                        popup.style.display = 'flex';
                         setTimeout(() => {
                             window.location = "entrar.html";
-                        }, "500");
+                        }, "2000");
                     } else {
                         throw "Houve um erro ao tentar realizar o cadastro!";
                     }
@@ -169,7 +189,13 @@
                 .catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`);
                 });
-            return false;
+                return false;
+            } else {
+            corpoMensagem.innerHTML = 'Preencha todos os campos corretamente.';
+            popup.style.display = 'flex';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, "2000");
         }
     } 
 </script>
