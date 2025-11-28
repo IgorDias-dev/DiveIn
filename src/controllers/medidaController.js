@@ -145,7 +145,7 @@ function buscarRegistro(req, res) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res.status(200).send("Nenhum resultado encontrado!")
         }
     }).catch(function (erro) {
         console.log(erro);
@@ -156,15 +156,15 @@ function buscarRegistro(req, res) {
 
 function buscarQuantidade(req, res) {
 
-    var historico = req.params.historico;
-
+    var cNome = req.params.cNome;
+    console.log(cNome + ' Nome da criatura')
     console.log(`Recuperando total de criaturas vistas pelo usuario`);
 
-    medidaModel.buscarQuantidade(historico).then(function (resultado) {
+    medidaModel.buscarQuantidade(cNome).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
-            res.status(204).send("Nenhum resultado encontrado!")
+            res.status(200).json([])
         }
     }).catch(function (erro) {
         console.log(erro);

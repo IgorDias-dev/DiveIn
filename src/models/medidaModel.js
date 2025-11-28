@@ -93,7 +93,8 @@ function buscarNomeId(historico) {
 }
 
 function buscarRegistro(historico) {
-    var instrucaoSql = `SELECT 
+    var instrucaoSql = `SELECT
+    idCriatura as id, 
     imagem as foto,
     nome,
     nomeCientifico,
@@ -107,16 +108,17 @@ function buscarRegistro(historico) {
     return database.executar(instrucaoSql);
 }
 
-function buscarQuantidade(historico) {
+function buscarQuantidade(cNome) {
     var instrucaoSql = `SELECT
-    count(date_format(r.dtRegistro, '%Y/%m')) as avistado,
-    c.nome
+    count(r.criatura_idCriatura) as avistado,
+    YEAR(r.dtRegistro) as ano,
+    MONTH(r.dtRegistro) as mes
         from registro as r
             join criatura as c
                 on r.criatura_idCriatura = c.idCriatura
-                    where c.nome = 'Garoupa'
-                        group by r.dtRegistro
-                            order by r.dtRegistro desc
+                    where r.criatura_idCriatura = '${cNome}'
+                        group by MONTH(r.dtRegistro), year(r.dtRegistro)
+                            order by MONTH(r.dtRegistro) desc
                                 limit 1`;
     
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
