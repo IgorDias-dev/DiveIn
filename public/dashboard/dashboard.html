@@ -29,8 +29,10 @@
                 <div class="botao">
                     <button onclick="fechar()">X</button>
                 </div>
-                <h2>REGISTRAR UMA CRIATURA</h2>
-                <p>Selecione abaixo a criatura que foi avistada durante seu mergulho</p>
+                <div class="info">
+                    <h2>REGISTRAR UMA CRIATURA</h2>
+                    <p>Selecione abaixo a criatura que foi avistada durante seu mergulho</p>
+                </div>
                 <div class="selecione">
                     <select class="criatura" id="slCriatura">
                         <option value="#">Selecione</option>
@@ -38,10 +40,15 @@
                     <button onclick="registrar()">REGISTRAR</button>
                 </div>
                 <p id="msg"></p>
-                <p>Se a criatura avistada não estiver listada acima você pode cadastrar uma nova criatura no botão abaixo</p>
-                <button onclick="registrar()">CADASTRAR NOVA CRIATURA</button>
+                <div class="info">
+                    <p>Se a criatura avistada não estiver listada acima você pode cadastrar uma nova criatura no botão abaixo</p>
+                    <button onclick="cadastrar()">CADASTRAR NOVA CRIATURA</button>
+                </div>
             </div>
             <div class="cadastro" id="cadastro">
+                <div class="botao">
+                    <button onclick="fechar()">X</button>
+                </div>
                 <h2>CADASTRAR UMA NOVA CRIATURA</h2>
                 <div class="inp">
                     <div class="sub um">
@@ -64,7 +71,7 @@
                     </div>
                     <div class="sub dois">
                         <p>UF</p>
-                        <input type="text" id="iptUF">
+                        <input type="text" maxlength="2" id="iptUF">
                     </div>
                 </div>
                 <div class="sub tres">
@@ -76,7 +83,6 @@
                     <input type="text" id="iptDescricao">
                 </div>
                 <button onclick="cadastrarCriatura()">CADASTRAR</button>
-                <p id="info"></p>
             </div>
         </div>
     </div>
@@ -126,6 +132,56 @@
     
     function fechar() {
         formulario.style.display = 'none';
+        window.location = "dashboard.html";
+    }
+    
+    function trocar() {
+        cadastro.style.display = 'none';
+        registro.style.display = 'flex';
+        buscarNomeId(historico);
+    }
+    
+    function cadastrar() {
+        cadastro.innerHTML = `<div class="botao">
+                    <button onclick="fechar()">X</button>
+                </div>
+                <h2>CADASTRAR UMA NOVA CRIATURA</h2>
+                <div class="inp">
+                    <div class="sub um">
+                        <p>Nome popular da criatura</p>
+                        <input type="text" id="iptNome">
+                    </div>
+                    <div class="sub um">
+                        <p>Nome científico da criatura</p>
+                        <input type="text" id="iptNomeCientifico">
+                    </div>
+                </div>
+                <div class="inp">
+                    <div class="sub dois">
+                        <p>Habitat</p>
+                        <input type="text" id="iptHabitat">
+                    </div>
+                    <div class="sub dois">
+                        <p>Praia</p>
+                        <input type="text" id="iptPraia">
+                    </div>
+                    <div class="sub dois">
+                        <p>UF</p>
+                        <input type="text" maxlength="2" id="iptUF">
+                    </div>
+                </div>
+                <div class="sub tres">
+                    <p>Insira o link (URL) da imagem</p>
+                    <input type="text" id="iptImagem">
+                </div>
+                <div class="sub quatro">
+                    <p>Descrição</p>
+                    <input type="text" id="iptDescricao">
+                </div>
+                <button onclick="cadastrarCriatura()">CADASTRAR</button>`;
+        cadastro.style.display = 'flex';
+        registro.style.display = 'none';
+
     }
     
     function cadastrarCriatura() {
@@ -154,22 +210,24 @@
                     descricaoServer: criaturaDescricao
                 }),
             })
-                .then(function (resposta) {
-                    console.log("resposta: ", resposta);
-
-                    if (resposta.ok) {
-                        iptNome.value = '';
-                        iptNomeCientifico.value = '';
-                        iptHabitat.value = '';
-                        iptPraia.value = '';
-                        iptUF.value = '';
-                        iptImagem.value = '';
-                        iptDescricao.value = '';
-                    } else {
-                        throw "Houve um erro ao tentar realizar o cadastro!";
-                    }
-                })
-                .catch(function (resposta) {
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+                
+                if (resposta.ok) {
+                    iptNome.value = '';
+                    iptNomeCientifico.value = '';
+                    iptHabitat.value = '';
+                    iptPraia.value = '';
+                    iptUF.value = '';
+                    iptImagem.value = '';
+                    iptDescricao.value = '';
+                    cadastro.innerHTML = `<h1>Cadastro de criatura realizado com sucesso</h1><h2>Registre o avistamento da criatura</h2>`;
+                    setTimeout(() => trocar(), 3000);
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`);
                 });
             return false;
@@ -472,14 +530,9 @@
 
                         myChart.update();
                     }
-
-                    // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                    proximaAtualizacao = setTimeout(() => atualizarGrafico(historico, dados, myChart), 2000);
                 });
             } else {
                 console.error('Nenhum dado encontrado ou erro na API');
-                // Altere aqui o valor em ms se quiser que o gráfico atualize mais rápido ou mais devagar
-                proximaAtualizacao = setTimeout(() => atualizarGrafico(historico, dados, myChart), 2000);
             }
         })
             .catch(function (error) {

@@ -104,8 +104,7 @@ function cadastrarCriatura(req, res) {
     } else if (descricao == undefined) {
         res.status(400).send("Seu sobrenome está undefined!");
     } else {
-
-        // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
+        
         usuarioModel.cadastrarCriatura(imagem, nome, nomeCientifico, habitat, praia, criaturaUF, descricao)
             .then(
                 function (resultado) {

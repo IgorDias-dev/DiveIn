@@ -7,6 +7,7 @@
     <title>DiveIn - Criaturas</title>
     <link rel="icon" href="../assets/logo.png">
     <link rel="stylesheet" href="../css/criaturas.css">
+    <script src="../js/sessao.js"></script>
 </head>
 <header>
     <div class="menu">
@@ -20,7 +21,7 @@
     </div>
 </header>
 
-<body>
+<body onload="validarSessao()">
     <div class="container">
         <div class="elementos">
             <h1>CRIATURAS</h1>
@@ -50,7 +51,7 @@
     </div>
 </body>
 <script>
-    var historico = JSON.parse(sessionStorage.ID_USUARIO);
+    var historico = sessionStorage.ID_USUARIO;
     var avistado = '';
     var idCriatura = '';
     var cNome = '';
