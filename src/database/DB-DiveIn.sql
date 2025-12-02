@@ -172,15 +172,3 @@ create view datas as SELECT count(c.nome) as quantidade, date_format(r.dtRegistr
 select nome from criatura;
 select nome, nomeCientifico, habitat, concat(praia, ' - ', uf) as localizacao, descricao from criatura;
 select count(date_format(r.dtRegistro, '%Y/%m')) avistado, date_format(r.dtRegistro, '%Y') ano, date_format(r.dtRegistro, '%m') , c.nome from registro as r join criatura as c on r.criatura_idCriatura = c.idCriatura where c.nome = 'Garoupa' group by r.dtRegistro order by r.dtRegistro desc limit 1;
-select * from criatura;
-select * from registro;
-SELECT
-    c.nome as criatura,
-    u.idUsuario as usuario
-        FROM registro as r
-            join criatura as c
-                on r.criatura_idCriatura = c.idCriatura
-                    join usuario as u
-                        on u.idUsuario = r.usuario_idUsuario
-                            where u.idUsuario = 1
-                                ORDER BY r.idRegistro DESC LIMIT 5;

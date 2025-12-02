@@ -15,6 +15,7 @@
         <div class="opcoesL">
             <img src="../assets/logo.png" alt="Logotipo DiveIn">
         </div>
+        <h3 id="saudacao">Olá, </h3>
         <div class="opcoesR">
             <a href="criaturas.html" class="normal">CRIATURAS</a>
             <a href="" onclick="limparSessao()" class="inOut">SAIR</a>
@@ -88,7 +89,7 @@
     </div>
     <div class="container">
         <div class="text">
-            <h1 id="saudacao">Olá, </h1>
+            <h1>DASHBOARD</h1>
             <div class="indicadores">
                 <div class="criaturasVistas">
                     <p>Você já viu</p>
@@ -118,6 +119,7 @@
 <script>
     var historico = JSON.parse(sessionStorage.ID_USUARIO);
     console.log(historico);
+    let saudacao = document.getElementById(`saudacao`);
     saudacao.innerHTML += `${sessionStorage.NOME_USUARIO} ${sessionStorage.SOBRENOME_USUARIO}`;
     let proximaAtualizacao;
     let criaturaKPI = 0;

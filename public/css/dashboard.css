@@ -61,6 +61,11 @@
     & .normal {
         color: white;
     }
+
+    & h3 {
+        color: white;
+        transform: translateX(-170%);
+    }
 }
 
 html {
