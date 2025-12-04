@@ -58,6 +58,9 @@
     & .normal {
         color: white;
     }
+    & .selecionado {
+        border-bottom: 3px white solid;
+    }
 }
 html{
     height: 100%;

@@ -17,6 +17,7 @@
         </div>
         <h3 id="saudacao">Olá, </h3>
         <div class="opcoesR">
+            <a href="dashboard.html" class="normal selecionado">DASHBOARD</a>
             <a href="criaturas.html" class="normal">CRIATURAS</a>
             <a href="" onclick="limparSessao()" class="inOut">SAIR</a>
         </div>
@@ -248,8 +249,6 @@
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    // crie um atributo que recebe o valor recuperado aqui
-                    // Agora vá para o arquivo routes/usuario.js
                     idUsuarioServer: historico,
                     idCriaturaServer: criatura
                 }),
@@ -259,7 +258,9 @@
 
                     if (resposta.ok) {
                         slCriatura.value = '#'
+                        msg.innerHTML = '<b>Criatura registrada com sucesso!</b>';
                     } else {
+                        msg.innerHTML = '<b>Selecione uma criatura</b>';
                         throw "Houve um erro ao tentar realizar o cadastro!";
                     }
                 })
@@ -422,10 +423,8 @@
 
         console.log('iniciando plotagem do gráfico...');
 
-        // Criando estrutura para plotar gráfico - labels
         let labels = [];
 
-        // Criando estrutura para plotar gráfico - dados
         let dados = {
             labels: labels,
             datasets: [{
@@ -440,7 +439,6 @@
         console.log('Estes dados foram recebidos pela funcao "obterDadosGrafico" e passados para "plotarGrafico":')
         console.log(resposta)
 
-        // Inserindo valores recebidos em estrutura para plotar o gráfico
         for (i = 0; i < resposta.length; i++) {
             var registro = resposta[i];
             labels.push(registro.periodo);
@@ -455,7 +453,6 @@
         console.log(dados.datasets)
         console.log('----------------------------------------------')
 
-        // Criando estrutura para plotar gráfico - config
         const config = {
             type: 'bar',
             data: dados,
@@ -487,7 +484,6 @@
             }
         };
 
-        // Adicionando gráfico criado em div na tela
         let myChart = new Chart(
             document.getElementById(`myChartCanvasHistorico`),
             config
@@ -501,7 +497,6 @@
             if (response.ok) {
                 response.json().then(function (novoRegistro) {
 
-                    // alertar(novoRegistro, historico);
                     console.log(`Dados recebidos: ${JSON.stringify(novoRegistro)}`);
                     console.log(`Dados atuais do gráfico:`);
                     console.log(dados);
@@ -519,7 +514,6 @@
 
                         myChart.update();
                     } else {
-                        // tirando e colocando valores no gráfico
                         for (let i = 0; i < 12; i++) {
                             dados.labels.shift();
                             dados.datasets[0].data.shift();
